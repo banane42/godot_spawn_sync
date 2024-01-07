@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0ij0v7in0k0d"]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_3f141"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bsu8j"]
+size = Vector3(1000, 1, 1000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m8gk2"]
+albedo_color = Color(0.482353, 0.482353, 0.482353, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wrqbp"]
+material = SubResource("StandardMaterial3D_m8gk2")
+size = Vector3(1000, 1, 1000)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_3f141")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="Terrain" type="Node3D" parent="Map"]
+
+[node name="Ground" type="StaticBody3D" parent="Map/Terrain"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Terrain/Ground"]
+shape = SubResource("BoxShape3D_bsu8j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Terrain/Ground"]
+mesh = SubResource("BoxMesh_wrqbp")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Map/Terrain"]
+transform = Transform3D(1, 0, 0, 0, -0.215281, 0.976552, 0, -0.976552, -0.215281, 0, 1000, 0)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+spawn_path = NodePath("../Players")
+spawn_limit = 4
