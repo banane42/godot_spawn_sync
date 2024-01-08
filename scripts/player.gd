@@ -12,11 +12,6 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
-@onready var camera = $CameraMount/Camera3D
-
-func _ready():
-	if player == multiplayer.get_unique_id():
-		camera.current = true
 
 func _physics_process(delta):
 	# Add the gravity.

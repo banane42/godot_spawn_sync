@@ -54,10 +54,11 @@ mesh = SubResource("BoxMesh_1qcyp")
 [node name="ServerSynchron" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_n0m5b")
 
-[node name="InputSynchron" type="MultiplayerSynchronizer" parent="."]
+[node name="InputSynchron" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("camera")]
 root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_ckkj8")
 script = ExtResource("1_bmkug")
+camera = NodePath("../CameraMount/Camera3D")
 
 [node name="CameraMount" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.73523, -0.468069)
