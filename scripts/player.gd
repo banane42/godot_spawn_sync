@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
-const LOOK_SENSITIVITY = 0.05
+const LOOK_SENSITIVITY = 0.005
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -13,6 +13,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
+@export var gun_mount: Node3D
 
 # Only runs if this is the server
 func _ready():
@@ -41,5 +42,7 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	rotate_y(-input.input_rotation.x * LOOK_SENSITIVITY)
+	gun_mount.rotate_x(-input.input_rotation.y * LOOK_SENSITIVITY)
+	gun_mount.rotation.x = clamp(gun_mount.rotation.x, -PI * 0.5, PI * 0.5)
 
 	move_and_slide()

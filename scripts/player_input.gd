@@ -13,16 +13,25 @@ func _ready():
 	else:
 		set_process(false)
 		set_process_input(false)
-	
+
+func _input(event: InputEvent):
+	if event is InputEventMouseMotion:
+		print("Relative: " + str(event.relative))
+
 func _process(_delta: float):
 	input_direction = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	input_rotation = Input.get_vector("look_left", "look_right", "look_up", "look_down")
+	#input_rotation = Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	
 	camera.rotate_x(-input_rotation.y * player.LOOK_SENSITIVITY)
 	camera.rotation.x = clamp(camera.rotation.x, -PI * 0.5, PI * 0.5)
 	
 	if Input.is_action_just_pressed("jump"):
 		jump.rpc()
+
+func _rotate_camera(mouse_vec: Vector2):
+	camera.rotate_x(-mouse_vec.y * player.LOOK_SENSITIVITY)
+	camera.rotation.x = clamp(camera.rotation.x, -PI * 0.5, PI * 0.5)
+	
 
 @rpc("call_local")
 func jump():
