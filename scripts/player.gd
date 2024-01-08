@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const LOOK_SENSITIVITY = 0.01
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -12,6 +13,10 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
+
+# Only runs if this is the server
+func _ready():
+	set_process(multiplayer.is_server())
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -34,5 +39,7 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	rotate_y(-input.input_rotation.x * LOOK_SENSITIVITY)
 
 	move_and_slide()
