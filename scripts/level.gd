@@ -1,6 +1,7 @@
 extends Node3D
 
 const SPAWN_RANDOM := 5.0
+var player_count := 0
 
 func _ready():
 	#If you are not the server, gtf outta heeer
@@ -30,6 +31,8 @@ func _add_player(net_id: int):
 	print("Adding player: " + str(net_id))
 	var character = preload("res://objects/player.tscn").instantiate()
 	character.player = net_id
+	character.color = Enums.PlayerColors.values()[player_count % Enums.PlayerColors.values().size()]
+	player_count += 1
 	
 	var pos = Vector2.from_angle(randf() * 2 * PI)
 	character.position = Vector3(
@@ -43,4 +46,5 @@ func _add_player(net_id: int):
 func _remove_player(net_id: int):
 	if not $Players.has_node(str(net_id)):
 		return
+	player_count -= 1
 	$Players.get_node(str(net_id)).queue_free()

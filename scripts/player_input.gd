@@ -49,3 +49,7 @@ func _rotate_camera(mouse_vec: Vector2):
 @rpc("call_local")
 func jump():
 	is_jumping = true
+	
+@rpc()
+func shoot():
+	pass

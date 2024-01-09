@@ -6,6 +6,7 @@ const LOOK_SENSITIVITY = 0.005
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var color: Enums.PlayerColors
 
 @export var player := 1:
 	set(id):
@@ -13,11 +14,13 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
+@onready var mesh = $Model/Mesh
 @export var camera_mount: Node3D
 
 # Only runs if this is the server
 func _ready():
 	set_process(multiplayer.is_server())
+	_set_material()
 	#set_physics_process(multiplayer.is_server())
 
 func _physics_process(delta):
@@ -48,3 +51,15 @@ func _physics_process(delta):
 	#input.input_rotation = Vector2()
 
 	move_and_slide()
+
+func _set_material():
+	match color:
+		Enums.PlayerColors.RED:
+			mesh.material_override = load("res://assets/player_red.material")
+		Enums.PlayerColors.GREEN:
+			mesh.material_override = load("res://assets/player_green.material")
+		Enums.PlayerColors.BLUE:
+			mesh.material_override = load("res://assets/player_blue.material")
+		Enums.PlayerColors.WHITE:
+			mesh.material_override = load("res://assets/player_white.material")
+		
