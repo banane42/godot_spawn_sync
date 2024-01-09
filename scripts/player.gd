@@ -78,4 +78,5 @@ func shoot():
 func recieve_damage():
 	health -= 1
 	if health <= 0:
+		health = 3
 		position = Vector3.ZERO
