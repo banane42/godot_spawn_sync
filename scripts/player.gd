@@ -7,21 +7,22 @@ const LOOK_SENSITIVITY = 0.005
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var color: Enums.PlayerColors
+var health := 3
 
-@export var player := 1:
+@export var player_id := 1:
 	set(id):
-		player = id
+		player_id = id
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
 @onready var mesh = $Model/Mesh
 @export var camera_mount: Node3D
+@export var raycast: RayCast3D
 
 # Only runs if this is the server
 func _ready():
 	set_process(multiplayer.is_server())
 	_set_material()
-	#set_physics_process(multiplayer.is_server())
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -48,7 +49,6 @@ func _physics_process(delta):
 	rotate_y(-input.mouse_motion.x * LOOK_SENSITIVITY)
 	camera_mount.rotate_x(-input.mouse_motion.y * LOOK_SENSITIVITY)
 	camera_mount.rotation.x = clamp(camera_mount.rotation.x, -PI * 0.5, PI * 0.5)
-	#input.input_rotation = Vector2()
 
 	move_and_slide()
 
@@ -63,3 +63,19 @@ func _set_material():
 		Enums.PlayerColors.WHITE:
 			mesh.material_override = load("res://assets/player_white.material")
 		
+@rpc("any_peer", "call_local")
+func shoot():
+	# If not server. Do not execute
+	if !multiplayer.is_server():
+		return
+	
+	if raycast.is_colliding():
+		var player = raycast.get_collider()
+		print("Hit player " + str(player.player_id))
+		player.recieve_damage.rpc()
+	
+@rpc("call_local")	
+func recieve_damage():
+	health -= 1
+	if health <= 0:
+		position = Vector3.ZERO

@@ -8,18 +8,18 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_m84c7"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_n0m5b"]
-properties/0/path = NodePath(".:player")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 0
-properties/1/path = NodePath(".:position")
+properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath(".:rotation")
+properties/2/path = NodePath(".:color")
 properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:color")
+properties/2/replication_mode = 0
+properties/3/path = NodePath(".:player_id")
 properties/3/spawn = true
-properties/3/replication_mode = 0
+properties/3/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ckkj8"]
 properties/0/path = NodePath(".:is_jumping")
@@ -39,9 +39,12 @@ albedo_color = Color(0, 0, 0, 1)
 material = SubResource("StandardMaterial3D_x10no")
 size = Vector3(0.13, 0.115, 0.345)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera_mount")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera_mount", "raycast")]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_mbwy0")
 camera_mount = NodePath("CameraMount")
+raycast = NodePath("CameraMount/RayCast3D")
 
 [node name="HitBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -76,3 +79,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.73523, 0.468069)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, 0.49, -1.077)
 mesh = SubResource("BoxMesh_1qcyp")
 skeleton = NodePath("../../../Model")
+
+[node name="RayCast3D" type="RayCast3D" parent="CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.116889)
+target_position = Vector3(0, -1, -50)
+collision_mask = 2

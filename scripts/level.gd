@@ -30,7 +30,7 @@ func _exit_tree():
 func _add_player(net_id: int):
 	print("Adding player: " + str(net_id))
 	var character = preload("res://objects/player.tscn").instantiate()
-	character.player = net_id
+	character.player_id = net_id
 	character.color = Enums.PlayerColors.values()[player_count % Enums.PlayerColors.values().size()]
 	player_count += 1
 	
