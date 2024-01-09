@@ -51,6 +51,11 @@ func _physics_process(delta):
 	camera_mount.rotation.x = clamp(camera_mount.rotation.x, -PI * 0.5, PI * 0.5)
 
 	move_and_slide()
+	
+	for col_idx in get_slide_collision_count():
+		var col := get_slide_collision(col_idx)
+		if col.get_collider() is RigidBody3D:
+			col.get_collider().apply_central_impulse(-col.get_normal() * 0.3)
 
 func _set_material():
 	match color:

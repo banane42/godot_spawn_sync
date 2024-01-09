@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://da1ex6twesf5x"]
+
+[ext_resource type="Script" path="res://scripts/ball.gd" id="1_ecxvj"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ndvqi"]
+friction = 10.0
+bounce = 0.1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tw536"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_gppui"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gtr7g"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Ball" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_ndvqi")
+linear_damp = 1.0
+script = ExtResource("1_ecxvj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_tw536")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_gppui")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_gtr7g")

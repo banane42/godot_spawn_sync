@@ -1,8 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://d0ij0v7in0k0d"]
+[gd_scene load_steps=16 format=3 uid="uid://d0ij0v7in0k0d"]
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_3f141"]
 [ext_resource type="Texture2D" uid="uid://bp7n0maptye00" path="res://addons/kenney_prototype_textures/dark/texture_04.png" id="2_sr5ir"]
 [ext_resource type="Texture2D" uid="uid://hmx0xorqw3ps" path="res://addons/kenney_prototype_textures/orange/texture_05.png" id="3_fwxxp"]
+[ext_resource type="PackedScene" uid="uid://da1ex6twesf5x" path="res://objects/ball.tscn" id="4_6g7gn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3bd21"]
+friction = 20.0
+rough = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bsu8j"]
 size = Vector3(1000, 1, 1000)
@@ -15,6 +20,9 @@ uv1_triplanar = true
 material = SubResource("StandardMaterial3D_fkilr")
 size = Vector3(1000, 1, 1000)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0whm4"]
+friction = 20.0
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_mcgq6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5dwww"]
@@ -23,6 +31,9 @@ uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_14kcj"]
 material = SubResource("StandardMaterial3D_5dwww")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dw7xi"]
+friction = 20.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fk00s"]
 size = Vector3(10, 1, 1)
@@ -39,6 +50,7 @@ script = ExtResource("1_3f141")
 [node name="Terrain" type="Node3D" parent="Map"]
 
 [node name="Ground" type="StaticBody3D" parent="Map/Terrain"]
+physics_material_override = SubResource("PhysicsMaterial_3bd21")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Terrain/Ground"]
 shape = SubResource("BoxShape3D_bsu8j")
@@ -51,6 +63,7 @@ transform = Transform3D(1, 0, 0, 0, -0.215281, 0.976552, 0, -0.976552, -0.215281
 
 [node name="Box" type="StaticBody3D" parent="Map/Terrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4.84688)
+physics_material_override = SubResource("PhysicsMaterial_0whm4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Terrain/Box"]
 shape = SubResource("BoxShape3D_mcgq6")
@@ -60,6 +73,7 @@ mesh = SubResource("BoxMesh_14kcj")
 
 [node name="Box2" type="StaticBody3D" parent="Map/Terrain"]
 transform = Transform3D(0.681998, 0, 0.731354, 0, 1, 0, -0.731354, 0, 0.681998, 4.49034, 1, 2.38975)
+physics_material_override = SubResource("PhysicsMaterial_dw7xi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Terrain/Box2"]
 shape = SubResource("BoxShape3D_fk00s")
@@ -68,6 +82,11 @@ shape = SubResource("BoxShape3D_fk00s")
 mesh = SubResource("BoxMesh_2r2ux")
 
 [node name="Players" type="Node3D" parent="."]
+
+[node name="Objects" type="Node3D" parent="."]
+
+[node name="Ball" parent="Objects" instance=ExtResource("4_6g7gn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50.6371, 0)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://objects/player.tscn")
