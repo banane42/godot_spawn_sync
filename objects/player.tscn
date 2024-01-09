@@ -7,13 +7,6 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_m84c7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x10no"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_1qcyp"]
-material = SubResource("StandardMaterial3D_x10no")
-size = Vector3(0.13, 0.115, 0.345)
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_n0m5b"]
 properties/0/path = NodePath(".:player")
 properties/0/spawn = true
@@ -32,13 +25,20 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:input_direction")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath(".:input_rotation")
-properties/2/spawn = true
-properties/2/replication_mode = 1
+properties/2/path = NodePath(".:mouse_motion")
+properties/2/spawn = false
+properties/2/replication_mode = 2
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("gun_mount")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x10no"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1qcyp"]
+material = SubResource("StandardMaterial3D_x10no")
+size = Vector3(0.13, 0.115, 0.345)
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera_mount")]
 script = ExtResource("1_mbwy0")
-gun_mount = NodePath("Model/GunMount")
+camera_mount = NodePath("CameraMount")
 
 [node name="HitBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -49,13 +49,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Model"]
 mesh = SubResource("CapsuleMesh_m84c7")
-skeleton = NodePath("../..")
-
-[node name="GunMount" type="Node3D" parent="Model"]
-
-[node name="Gun" type="MeshInstance3D" parent="Model/GunMount"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, 0.49, -1.077)
-mesh = SubResource("BoxMesh_1qcyp")
 skeleton = NodePath("../..")
 
 [node name="ServerSynchron" type="MultiplayerSynchronizer" parent="."]
@@ -72,3 +65,11 @@ player = NodePath("..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.73523, -0.468069)
 
 [node name="Camera3D" type="Camera3D" parent="CameraMount"]
+
+[node name="GunMount" type="Node3D" parent="CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.73523, 0.468069)
+
+[node name="Gun" type="MeshInstance3D" parent="CameraMount/GunMount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, 0.49, -1.077)
+mesh = SubResource("BoxMesh_1qcyp")
+skeleton = NodePath("../../../Model")

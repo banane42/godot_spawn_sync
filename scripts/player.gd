@@ -13,11 +13,12 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		$InputSynchron.set_multiplayer_authority(id)
 
 @onready var input = $InputSynchron
-@export var gun_mount: Node3D
+@export var camera_mount: Node3D
 
 # Only runs if this is the server
 func _ready():
 	set_process(multiplayer.is_server())
+	#set_physics_process(multiplayer.is_server())
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -41,8 +42,9 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
-	rotate_y(-input.input_rotation.x * LOOK_SENSITIVITY)
-	gun_mount.rotate_x(-input.input_rotation.y * LOOK_SENSITIVITY)
-	gun_mount.rotation.x = clamp(gun_mount.rotation.x, -PI * 0.5, PI * 0.5)
+	rotate_y(-input.mouse_motion.x * LOOK_SENSITIVITY)
+	camera_mount.rotate_x(-input.mouse_motion.y * LOOK_SENSITIVITY)
+	camera_mount.rotation.x = clamp(camera_mount.rotation.x, -PI * 0.5, PI * 0.5)
+	#input.input_rotation = Vector2()
 
 	move_and_slide()
