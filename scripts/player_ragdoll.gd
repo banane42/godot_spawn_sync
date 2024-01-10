@@ -13,8 +13,8 @@ func _ready():
 		return
 	
 	$CleanupTimer.start()
-	rotate_x(randf() * deg_to_rad(5.0))
-	rotate_z(randf() * deg_to_rad(5.0))
+	rotate_x(randf_range(-1.0, 1.0) * deg_to_rad(5.0))
+	rotate_z(randf_range(-1.0, 1.0) * deg_to_rad(5.0))
 
 func _set_material():
 	match color:

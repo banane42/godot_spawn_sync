@@ -56,7 +56,8 @@ func _player_death(player: CharacterBody3D):
 	var ragdoll = preload("res://objects/player_ragdoll.tscn").instantiate()
 	ragdoll.transform = player.transform
 	ragdoll.position = ragdoll.position + Vector3(0, 1, 0)
-	ragdoll.apply_central_force(player.velocity * 10.0)
+	#ragdoll.apply_central_force(player.velocity * 10.0)
+	ragdoll.apply_central_force(Vector3(0, 1000, 0))
 	ragdoll.color = player.color
 	$PhysicsObjects.add_child(ragdoll, true)
 	
