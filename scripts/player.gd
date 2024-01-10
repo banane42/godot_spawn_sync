@@ -14,8 +14,8 @@ var health := 3
 		player_id = id
 		$InputSynchron.set_multiplayer_authority(id)
 
-@onready var input = $InputSynchron
-@onready var mesh = $Model/Mesh
+@export var input: MultiplayerSynchronizer
+@export var mesh: MeshInstance3D
 @export var camera_mount: Node3D
 @export var raycast: RayCast3D
 
@@ -83,5 +83,6 @@ func shoot():
 func recieve_damage():
 	health -= 1
 	if health <= 0:
+		Signals.player_death.emit(self)
 		health = 3
 		position = Vector3.ZERO

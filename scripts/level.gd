@@ -5,12 +5,15 @@ var player_count := 0
 
 func _ready():
 	#If you are not the server, gtf outta heeer
-	if not multiplayer.is_server():
+	if !multiplayer.is_server():
 		return
 	
 	#Register callbacks to mulitplayer signals
 	multiplayer.peer_connected.connect(_add_player)
 	multiplayer.peer_disconnected.connect(_remove_player)
+	
+	Signals.player_death.connect(_player_death)
+	Signals.ragdoll_cleanup.connect(_cleanup_ragdoll)
 	
 	#Add players for all already connected peers
 	for net_id in multiplayer.get_peers():
@@ -48,3 +51,16 @@ func _remove_player(net_id: int):
 		return
 	player_count -= 1
 	$Players.get_node(str(net_id)).queue_free()
+	
+func _player_death(player: CharacterBody3D):
+	var ragdoll = preload("res://objects/player_ragdoll.tscn").instantiate()
+	ragdoll.transform = player.transform
+	ragdoll.position = ragdoll.position + Vector3(0, 1, 0)
+	ragdoll.apply_central_force(player.velocity * 10.0)
+	ragdoll.color = player.color
+	$PhysicsObjects.add_child(ragdoll, true)
+	
+func _cleanup_ragdoll(node_path):
+	if !$PhysicsObjects.has_node(node_path):
+		return
+	$PhysicsObjects.get_node(node_path).queue_free()

@@ -40,10 +40,12 @@ albedo_color = Color(0, 0, 0, 1)
 material = SubResource("StandardMaterial3D_x10no")
 size = Vector3(0.13, 0.115, 0.345)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera_mount", "raycast")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("input", "mesh", "camera_mount", "raycast")]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_mbwy0")
+input = NodePath("InputSynchron")
+mesh = NodePath("Model/Mesh")
 camera_mount = NodePath("CameraMount")
 raycast = NodePath("CameraMount/RayCast3D")
 
