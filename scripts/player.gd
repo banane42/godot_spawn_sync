@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 const SPEED = 5.0
+const RUN_SPEED = 2.0
 const JUMP_VELOCITY = 4.5
 const LOOK_SENSITIVITY = 0.005
 
@@ -34,17 +35,35 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 
 	input.is_jumping = false
-
-	var direction = (transform.basis * Vector3(
+	
+	var speed = SPEED
+	#if input.is_running:
+		#speed *= RUN_SPEED
+	
+	if input.is_running:
+		velocity = transform.basis * Vector3.FORWARD
+	else:
+		var direction = (transform.basis * Vector3(
 		input.input_direction.x, 
 		0, 
 		input.input_direction.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		if direction:
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+		else:
+			velocity.x = move_toward(velocity.x, 0, speed)
+			velocity.z = move_toward(velocity.z, 0, speed)
+	
+	#var direction = (transform.basis * Vector3(
+		#input.input_direction.x, 
+		#0, 
+		#input.input_direction.y)).normalized()
+	#if direction:
+		#velocity.x = direction.x * speed
+		#velocity.z = direction.z * speed
+	#else:
+		#velocity.x = move_toward(velocity.x, 0, speed)
+		#velocity.z = move_toward(velocity.z, 0, speed)
 
 	rotate_y(-input.mouse_motion.x * LOOK_SENSITIVITY)
 	camera_mount.rotate_x(-input.mouse_motion.y * LOOK_SENSITIVITY)
@@ -85,4 +104,3 @@ func recieve_damage():
 	if health <= 0:
 		Signals.player_death.emit(self)
 		health = 3
-		position = Vector3.ZERO

@@ -1,6 +1,7 @@
 extends MultiplayerSynchronizer
 
 @export var is_jumping := false
+@export var is_running := false
 @export var input_direction := Vector2()
 @export var mouse_motion := Vector2()
 var previous_mouse_motion := Vector2()
@@ -23,6 +24,10 @@ func _input(event: InputEvent):
 
 func _process(_delta: float):
 	input_direction = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	#is_running = Input.is_action_pressed("run")
+	
+	if Input.is_action_just_released("run"):
+		is_running = !is_running
 	
 	if Input.is_action_just_pressed("jump"):
 		jump.rpc()

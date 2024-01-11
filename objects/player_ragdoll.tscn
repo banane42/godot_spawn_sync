@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/player_ragdoll.gd" id="1_1jpbp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0stu0"]
-bounce = 0.1
+friction = 5.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3rkmm"]
 
@@ -22,8 +22,12 @@ properties/2/replication_mode = 0
 
 [node name="PlayerRagdoll" type="RigidBody3D" node_paths=PackedStringArray("mesh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 4
+collision_mask = 7
+mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_0stu0")
-linear_damp = 1.0
+linear_damp = 5.0
+angular_damp = 1.0
 script = ExtResource("1_1jpbp")
 mesh = NodePath("MeshInstance3D")
 
@@ -37,7 +41,7 @@ mesh = SubResource("CapsuleMesh_2iutg")
 replication_config = SubResource("SceneReplicationConfig_haf1w")
 
 [node name="CleanupTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 10.0
 one_shot = true
 
 [connection signal="timeout" from="CleanupTimer" to="." method="_on_cleanup_timer_timeout"]

@@ -37,12 +37,7 @@ func _add_player(net_id: int):
 	character.color = Enums.PlayerColors.values()[player_count % Enums.PlayerColors.values().size()]
 	player_count += 1
 	
-	var pos = Vector2.from_angle(randf() * 2 * PI)
-	character.position = Vector3(
-		pos.x * SPAWN_RANDOM * randf(),
-		0,
-		pos.y * SPAWN_RANDOM * randf()
-	)
+	character.position = _random_spawn_pos()
 	character.name = str(net_id)
 	$Players.add_child(character, true)
 
@@ -53,11 +48,17 @@ func _remove_player(net_id: int):
 	$Players.get_node(str(net_id)).queue_free()
 	
 func _player_death(player: CharacterBody3D):
+	var old_trans = player.transform
+	var old_vel = player.velocity
+	
+	#Move player
+	player.position = _random_spawn_pos()
+	
+	#Add Ragdoll
 	var ragdoll = preload("res://objects/player_ragdoll.tscn").instantiate()
-	ragdoll.transform = player.transform
+	ragdoll.transform = old_trans
 	ragdoll.position = ragdoll.position + Vector3(0, 1, 0)
-	#ragdoll.apply_central_force(player.velocity * 10.0)
-	ragdoll.apply_central_force(Vector3(0, 1000, 0))
+	ragdoll.apply_central_impulse(old_vel * 10)
 	ragdoll.color = player.color
 	$PhysicsObjects.add_child(ragdoll, true)
 	
@@ -65,3 +66,11 @@ func _cleanup_ragdoll(node_path):
 	if !$PhysicsObjects.has_node(node_path):
 		return
 	$PhysicsObjects.get_node(node_path).queue_free()
+	
+func _random_spawn_pos() -> Vector3:
+	var pos = Vector2.from_angle(randf() * 2 * PI)
+	return Vector3(
+		pos.x * SPAWN_RANDOM * randf(),
+		0,
+		pos.y * SPAWN_RANDOM * randf()
+	)
